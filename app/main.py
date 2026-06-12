@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from app.auth import get_usuario_opcional
+from fastapi import Depends, Request
+from fastapi.responses import RedirectResponse
 
 from app.controllers import auth_controller
 from app.controllers import usuario_controller
@@ -36,3 +38,21 @@ def tela_inicial(
         request,
             "home.html", 
             {"request": request, "usuario": usuario})
+
+@app.get("/")
+def pos_login(
+    request: Request,
+    usuario = Depends(get_usuario_opcional)
+):
+    if usuario is None:
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request
+            }
+        )
+
+    return RedirectResponse(
+        url="/dashboard",
+        status_code=302
+    )
