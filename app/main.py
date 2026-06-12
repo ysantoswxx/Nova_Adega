@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from app.auth import get_usuario_opcional
 from fastapi import Depends, Request
 from fastapi.responses import RedirectResponse
+from fastapi import Form
 
 from app.controllers import auth_controller
 from app.controllers import usuario_controller
@@ -39,8 +40,28 @@ def tela_inicial(
             "home.html", 
             {"request": request, "usuario": usuario})
 
-@app.get("/")
-def pos_login(
+@app.post("/login")
+async def login(
+    usuario: str = Form(...),
+    email: str = Form(...),
+    senha: str = Form(...)
+):
+
+    # Exemplo simples
+    if usuario == "admin" and email == "admin@gmail.com" and senha == "123":
+
+        return RedirectResponse(
+            url="/dashboard",
+            status_code=303
+        )
+
+    return RedirectResponse(
+        url="/",
+        status_code=303
+    )
+
+@app.get("/dashboard")
+def dashboard(
     request: Request,
     usuario = Depends(get_usuario_opcional)
 ):
