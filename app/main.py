@@ -1,58 +1,69 @@
-# Ponto de entrada do meu sistema
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
-from app.auth import get_usuario_opcional
-from fastapi import Depends, Request
-from fastapi.responses import RedirectResponse
-
-from app.controllers import auth_controller
-from app.controllers import usuario_controller
+from fastapi.templating import Jinja2Templates
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
-app = FastAPI(title="Sistema de ponto de vendas")
+from app.database import Base, engine
 
-#Configurar a pasta para servir os arquivos estáticos (CSS, JS e IMG)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+from app.models import (
+    produtos,
+    categorias,
+    auth,
+    vendas,
+    estoques,
+    dashboard,
+    usuarios,
+    movimentacoes,
+    relatorio
+)
 
-#configurar o jinja2 para renderizar os Html
-templates = Jinja2Templates(directory="app/templates")
+Base.metadata.create_all(bind=engine)
 
-#Incluir o routes dos controladores
-app.include_router(auth_controller.router)
-app.include_router(usuario_controller.router)
+app = FastAPI(
+    title="PDV ADEGA"
+)
 
-@app.get("/")
-def tela_inicial(
-    request: Request, 
-    usuario = Depends(get_usuario_opcional)
-):
-    if usuario is None:
-        return templates.TemplateResponse(
-            request,
-            "index.html", 
-            {"request": request}
-            )
+templates = Jinja2Templates(
+    directory="app/templates"
+)
+
+app.mount(
+    "/static",
+    StaticFiles(directory="app/static"),
+    name="static"
+)
+
+app.include_router(produtos.router)
+app.include_router(auth.router)
+app.include_router(vendas.router)
+app.include_router(estoques.router)
+app.include_router(dashboard.router)
+app.include_router(usuarios.router)
+app.include_router(categorias.router)
+app.include_router(movimentacoes.router)
+app.include_router(relatorio.router)
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
     return templates.TemplateResponse(
-        request,
-            "home.html", 
-            {"request": request, "usuario": usuario})
-
-@app.get("/")
-def pos_login(
-    request: Request,
-    usuario = Depends(get_usuario_opcional)
-):
-    if usuario is None:
-        return templates.TemplateResponse(
-            "index.html",
-            {
-                "request": request
-            }
-        )
-
-    return RedirectResponse(
-        url="/dashboard",
-        status_code=302
+        "base.html",
+        {"request": request}
     )
+
+@app.exception_handler(404)
+def not_found(request: Request, exc):
+    return templates.TemplateResponse("404.html", {
+        "request": request
+    }, status_code=404)
+
+@app.exception_handler(StarletteHTTPException)
+def http_exception_handler(request: Request, exc: StarletteHTTPException):
+
+    if exc.status_code == 401:
+        return RedirectResponse(url="/auth/login")
+
+    if exc.status_code == 403:
+        return RedirectResponse(url="/auth/login")
+
+    return RedirectResponse(url="/404")
