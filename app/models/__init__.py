@@ -1,5 +1,5 @@
-from app.models import categorias
-from app.models import produtos
+from app.models import categoria
+from app.models import produto
 from app.models import usuarios
 
 #Gerar a migration
