@@ -167,6 +167,35 @@
 
     </div>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const botoesCategoria = document.querySelectorAll('.categorias button');
+        const cardsProduto = document.querySelectorAll('.grid-produtos .produto');
+
+        botoesCategoria.forEach(botao => {
+            botao.addEventListener('click', () => {
+                // Remove 'ativo' de todos e adiciona no clicado
+                botoesCategoria.forEach(b => b.classList.remove('ativo'));
+                botao.classList.add('ativo');
+
+                const categoriaFiltro = botao.dataset.categoria;
+
+                cardsProduto.forEach(card => {
+                    const cardCategoria = card.dataset.categoria;
+
+                    if (categoriaFiltro === 'todos' || cardCategoria === categoriaFiltro) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeInUp 0.3s ease-out both';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
 </body>
 
 </html>
