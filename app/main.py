@@ -26,7 +26,6 @@ app.include_router(categoria_controller.router)
 app.include_router(produto_controller.router)
 app.include_router(movimentacao_controller.router)
 
-<<<<<<< HEAD
 templates = Jinja2Templates(
     directory="app/templates"
 )
@@ -38,31 +37,9 @@ app.mount(
 )
 
 # app.include_router(produtos.router)
-app.include_router(auth.router)
-app.include_router(vendas.router)
-app.include_router(estoques.router)
-app.include_router(dashboard.router)
-app.include_router(usuarios.router)
-app.include_router(categorias.router)
-app.include_router(movimentacoes.router)
-app.include_router(relatorio.router)
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-=======
-@app.get("/")
-def tela_inicial(
-    request: Request,
-    usuario = Depends(get_usuario_opcional)
-):
-    #Tela não logado
-    if usuario is None:
-        return templates.TemplateResponse(
-            request,
-            "index.html",
-            {"request": request}
-        )
-    #Logado - exibir a tela de funcionario
->>>>>>> 3fc121502ac82fea10c0c5e2a9be532583a76616
     return templates.TemplateResponse(
         request,
         "home.html",
