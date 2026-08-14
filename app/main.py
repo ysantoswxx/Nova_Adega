@@ -38,8 +38,19 @@ app.mount(
 
 # app.include_router(produtos.router)
 
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
+@app.get("/")
+def tela_inicial(
+    request: Request,
+    usuario = Depends(get_usuario_opcional)
+):
+    #Tela não logado
+    if usuario is None:
+        return templates.TemplateResponse(
+            request,
+            "index.html",
+            {"request": request}
+        )
+    #Logado - exibir a tela de funcionario
     return templates.TemplateResponse(
         request,
         "home.html",
