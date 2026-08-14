@@ -1,170 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDV - Adega Premium</title>
-
     <link rel="stylesheet" href="/static/css/home.css">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
-
     <div class="container">
-
-        <!-- CONTEÚDO -->
         <main class="conteudo">
-
-            <!-- CABEÇALHO -->
             <header>
-
                 <div class="logo">
-
-                    <div class="icone">
-                        <i class="fa-solid fa-wine-glass"></i>
-                    </div>
-
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
                     <div>
                         <h2>Adega Premium</h2>
                         <span>Sistema PDV</span>
                     </div>
-
                 </div>
-
                 <div class="data">
                     <i class="fa-regular fa-clock"></i>
-                    <span>16:08</span>
-                    <span>•</span>
-                    <span>24 de Abril de 2026</span>
+                    <span>PDV Ativo</span>
                 </div>
-
             </header>
 
-            <!-- MENU -->
             <nav>
-
-                <a href="#" class="ativo">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Ponto de Venda
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-chart-line"></i>
-                    Histórico
-                </a>
-
-                <a href="/produtos">
-                    <i class="fa-solid fa-box"></i>
-                    Produtos
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-users"></i>
-                    Clientes
-                </a>
-
-                <a href="/movimentacoes">
-                    <i class="fa-solid fa-users"></i>
-                    Movimentações
-                </a>
-
-                <a href="/auth/logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Sair
-                </a>
-
+                <a href="/" class="ativo"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
             </nav>
 
-            <!-- PESQUISA -->
             <section class="pesquisa">
-
                 <div class="buscar">
-
                     <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input
-                        type="text"
-                        placeholder="Buscar produtos...">
-
+                    <input type="text" id="input-busca" placeholder="Buscar produtos...">
                 </div>
-
             </section>
 
-            <!-- CATEGORIAS -->
             <section class="categorias">
-
-                <button class="ativo">Todos</button>
-
-                <button>Cervejas</button>
-
-                <button>Refrigerantes</button>
-
-                <button>Combos</button>
-
-                <button>Kit Narguilé</button>
-
-                <button>Bebidas</button>
-
-                <button>Vinhos</button>
-
-                <button>Doces</button>
-
+                <button class="ativo" data-categoria="todos">Todos</button>
+                <button data-categoria="Cervejas">Cervejas</button>
+                <button data-categoria="Refrigerantes">Refrigerantes</button>
+                <button data-categoria="Combos">Combos</button>
+                <button data-categoria="Kit Narguilé">Kit Narguilé</button>
+                <button data-categoria="Bebidas">Bebidas</button>
+                <button data-categoria="Vinhos">Vinhos</button>
+                <button data-categoria="Doces">Doces</button>
             </section>
 
-            <!-- ÁREA PRINCIPAL -->
             <section class="conteudo-principal">
-
-                <div class="mensagem">
-
-                    <i class="fa-solid fa-wine-bottle"></i>
-
-                    <h2>Bem-vindo ao Sistema da Adega</h2>
-
-                    <p>
-                        Utilize o menu acima para acessar os módulos do sistema.
-                    </p>
-
+                <div class="grid-produtos" id="grid-produtos">
+                    {% for p in produtos %}
+                    <div class="card-produto" 
+                         data-categoria="{{ p.categoria.nome if p.categoria else 'Sem categoria' }}"
+                         data-nome="{{ p.nome }}"
+                         onclick="adicionarAoCarrinho({{ p.id }}, '{{ p.nome }}', {{ p.preco }} )">
+                        <div class="card-img">
+                            <img src="{{ p.imagem_url }}" alt="{{ p.nome }}">
+                        </div>
+                        <div class="card-info">
+                            <h3>{{ p.nome }}</h3>
+                            <span class="badge-categoria">{{ p.categoria.nome if p.categoria else 'Sem categoria' }}</span>
+                            <div class="card-preco">
+                                <span class="preco">R$ {{ "%.2f"|format(p.preco) }}</span>
+                                <span class="estoque {{ 'baixo' if p.estoque_baixo else '' }}">{{ p.estoque_atual }} un</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-
             </section>
-
         </main>
 
-        <!-- CARRINHO -->
         <aside class="carrinho">
-
             <div class="titulo">
-
-                <h2>
-
-                    <i class="fa-solid fa-cart-shopping"></i>
-
-                    Carrinho
-
-                </h2>
-
-                <span>0 item(s)</span>
-
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span id="contador-itens">0 item(s)</span>
             </div>
-
-            <div class="vazio">
-
+            <div id="vazio-carrinho" class="vazio">
                 <i class="fa-solid fa-cart-shopping"></i>
-
                 <h3>Carrinho vazio</h3>
-
                 <p>Adicione produtos para começar.</p>
-
             </div>
-
+            <div id="itens-carrinho" class="itens"></div>
+            <div id="rodape-carrinho" class="rodape" style="display:none;">
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="valor-total">R$ 0,00</span>
+                </div>
+                <button class="btn-finalizar" onclick="finalizarVenda()">
+                    <i class="fa-solid fa-check"></i> Finalizar Venda
+                </button>
+            </div>
         </aside>
-
     </div>
 
-</body>
+    <script>
+        let carrinho = [];
 
+        function adicionarAoCarrinho(id, nome, preco) {
+            const itemExistente = carrinho.find(i => i.id === id);
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({ id, nome, preco, quantidade: 1 });
+            }
+            atualizarCarrinho();
+        }
+
+        function removerDoCarrinho(id) {
+            carrinho = carrinho.filter(i => i.id !== id);
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const container = document.getElementById('itens-carrinho');
+            const vazio = document.getElementById('vazio-carrinho');
+            const rodape = document.getElementById('rodape-carrinho');
+            const contador = document.getElementById('contador-itens');
+            const totalEl = document.getElementById('valor-total');
+
+            const totalItens = carrinho.reduce((sum, i) => sum + i.quantidade, 0);
+            const totalValor = carrinho.reduce((sum, i) => sum + (i.preco * i.quantidade), 0);
+
+            contador.textContent = `${totalItens} item(s)`;
+
+            if (carrinho.length === 0) {
+                vazio.style.display = 'block';
+                rodape.style.display = 'none';
+                container.innerHTML = '';
+                return;
+            }
+
+            vazio.style.display = 'none';
+            rodape.style.display = 'block';
+            totalEl.textContent = `R$ ${totalValor.toFixed(2).replace('.', ',')}`;
+
+            container.innerHTML = carrinho.map(item => `
+                <div class="item-carrinho">
+                    <div class="item-info">
+                        <h4>${item.nome}</h4>
+                        <span>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="item-quantidade">
+                        <span>Qtd: ${item.quantidade}</span>
+                        <button onclick="removerDoCarrinho(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function finalizarVenda() {
+            if (carrinho.length === 0) return;
+            fetch('/vendas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ itens: carrinho })
+            }).then(res => res.json()).then(data => {
+                alert('Venda finalizada com sucesso!');
+                carrinho = [];
+                atualizarCarrinho();
+            }).catch(err => alert('Erro ao finalizar venda.'));
+        }
+
+        // Filtro por categoria
+        document.querySelectorAll('.categorias button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.categorias button').forEach(b => b.classList.remove('ativo'));
+                btn.classList.add('ativo');
+                filtrarProdutos();
+            });
+        });
+
+        function filtrarProdutos() {
+            const categoriaAtiva = document.querySelector('.categorias button.ativo')?.dataset.categoria || 'todos';
+            const busca = document.getElementById('input-busca').value.toLowerCase();
+
+            document.querySelectorAll('.card-produto').forEach(card => {
+                const cardCategoria = card.dataset.categoria;
+                const cardNome = card.dataset.nome.toLowerCase();
+                const matchCategoria = categoriaAtiva === 'todos' || cardCategoria === categoriaAtiva;
+                const matchBusca = cardNome.includes(busca);
+                card.style.display = (matchCategoria && matchBusca) ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('input-busca').addEventListener('input', filtrarProdutos);
+    </script>
+</body>
 </html>
