@@ -2,94 +2,73 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Produtos — AAPM SENAI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-    <h1>Produtos</h1>
+    <div class="container">
+        <main class="conteudo">
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Gestão de Produtos</span>
+                    </div>
+                </div>
+            </header>
 
-    {% if request.query_params.get('criado') == 'ok' %}
-        <p style="color:green">Produto criado com sucesso!</p>
-    {% endif %}
-    {% if request.query_params.get('desativado') == 'ok' %}
-        <p style="color:green">Produto desativado.</p>
-    {% endif %}
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos" class="ativo"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
 
-    <!-- Filtros -->
-    <form method="get" action="/produtos">
-        <input  type="text"
-                name="busca"
-                placeholder="Buscar por nome..."
-                value="{{ busca }}">
+            <section class="barra-acao">
+                <a href="/produtos/novo" class="btn-novo">
+                    <i class="fa-solid fa-plus"></i> Novo Produto
+                </a>
+            </section>
 
-        <select name="categoria_id">
-            <option value="0">Todas as categorias</option>
-            {% for c in categorias %}
-                <option value="{{ c.id }}"
-                    {{ 'selected' if categoria_id == c.id else '' }}>
-                    {{ c.nome }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Filtrar</button>
-
-        {% if busca or categoria_id %}
-            <a href="/produtos">Limpar</a>
-        {% endif %}
-    </form>
-
-    {% if usuario.role == 'admin' %}
-        <a href="/produtos/novo">+ Novo produto</a>
-    {% endif %}
-
-    <table border="1" cellpadding="8">
-        <thead>
-            <tr>
-                <th>Imagem</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Preço</th>
-                <th>Estoque</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in produtos %}
-            <tr>
-                <td>
-                    <img src="{{ p.imagem_url }}"
-                         alt="{{ p.nome }}"
-                         width="50" height="50"
-                         style="object-fit:cover">
-                </td>
-                <td><a href="/produtos/{{ p.id }}">{{ p.nome }}</a></td>
-                <td>{{ p.categoria.nome if p.categoria else "—" }}</td>
-                <td>R$ {{ "%.2f"|format(p.preco) }}</td>
-                <td>{{ p.estoque_atual }}</td>
-                <td>
-                    {% if usuario.role == 'admin' %}
-                        <a href="/produtos/{{ p.id }}/editar">Editar</a>
-                        <form action="/produtos/{{ p.id }}/desativar"
-                              method="post"
-                              style="display:inline"
-                              onsubmit="return confirm('Desativar {{ p.nome }}?')">
-                            <button type="submit">Desativar</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-
-            {% if not produtos %}
-            <tr>
-                <td colspan="6" style="text-align:center">
-                    Nenhum produto encontrado.
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
-
-    <p><a href="/">← Dashboard</a></p>
+            <section class="conteudo-principal">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in produtos %}
+                        <tr>
+                            <td><img src="{{ p.imagem_url }}" alt="{{ p.nome }}" class="tabela-img"></td>
+                            <td><strong>{{ p.nome }}</strong></td>
+                            <td>{{ p.categoria.nome if p.categoria else '—' }}</td>
+                            <td>R$ {{ "%.2f"|format(p.preco ) }}</td>
+                            <td>
+                                <span class="badge {{ 'badge-baixo' if p.estoque_baixo else 'badge-ok' }}">
+                                    {{ p.estoque_atual }} un
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/produtos/{{ p.id }}/editar" class="btn-acao btn-editar">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
