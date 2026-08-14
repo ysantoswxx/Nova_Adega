@@ -8,8 +8,7 @@
 
     <link rel="stylesheet" href="/static/css/home.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
@@ -86,9 +85,7 @@
 
                     <i class="fa-solid fa-magnifying-glass"></i>
 
-                    <input
-                        type="text"
-                        placeholder="Buscar produtos...">
+                    <input type="text" placeholder="Buscar produtos...">
 
                 </div>
 
@@ -97,38 +94,102 @@
             <!-- CATEGORIAS -->
             <section class="categorias">
 
-                <button class="ativo">Todos</button>
+                <button type="button" class="categoria-btn ativo" data-categoria="todos">
 
-                <button>Cervejas</button>
+                    Todos
 
-                <button>Refrigerantes</button>
+                </button>
 
-                <button>Combos</button>
+                {% for categoria in categorias %}
 
-                <button>Kit Narguilé</button>
+                <button type="button" class="categoria-btn" data-categoria="{{ categoria.id }}">
 
-                <button>Bebidas</button>
+                    {{ categoria.nome }}
 
-                <button>Vinhos</button>
+                </button>
 
-                <button>Doces</button>
+                {% endfor %}
 
             </section>
 
             <!-- ÁREA PRINCIPAL -->
             <section class="conteudo-principal">
 
+                <div class="produtos-grid">
+
+                    {% for produto in produtos %}
+
+                    <div class="produto-card" data-categoria="{{ produto.categoria_id }}"
+                        data-nome="{{ produto.nome|lower }}">
+
+                        <div class="produto-imagem">
+
+                            <img src="{{ produto.imagem_url }}" alt="{{ produto.nome }}">
+
+                        </div>
+
+                        <div class="produto-info">
+
+                            <h3>{{ produto.nome }}</h3>
+
+                            <p class="produto-categoria">
+
+                                {% if produto.categoria %}
+                                {{ produto.categoria.nome }}
+                                {% else %}
+                                Sem categoria
+                                {% endif %}
+
+                            </p>
+
+                            <strong class="produto-preco">
+                                R$ {{ "%.2f"|format(produto.preco) }}
+                            </strong>
+
+                            <p class="produto-estoque">
+
+                                Estoque:
+                                {{ produto.estoque_atual }}
+
+                            </p>
+
+                            <button type="button" class="btn-adicionar" {% if produto.estoque_atual <=0 %}disabled{%
+                                endif %}>
+
+                                <i class="fa-solid fa-cart-plus"></i>
+
+                                {% if produto.estoque_atual > 0 %}
+                                Adicionar
+                                {% else %}
+                                Sem estoque
+                                {% endif %}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                {% if not produtos %}
+
                 <div class="mensagem">
 
                     <i class="fa-solid fa-wine-bottle"></i>
 
-                    <h2>Bem-vindo ao Sistema da Adega</h2>
+                    <h2>Nenhum produto cadastrado</h2>
 
                     <p>
-                        Utilize o menu acima para acessar os módulos do sistema.
+                        Cadastre produtos para começar a utilizar o PDV.
                     </p>
 
                 </div>
+
+                {% endif %}
 
             </section>
 
@@ -164,6 +225,8 @@
         </aside>
 
     </div>
+
+    <script src="/static/js/home.js"></script>
 
 </body>
 
