@@ -1,0 +1,387 @@
+<!-- templates/movimentacoes/historico.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Histórico — {{ produto.nome }}</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/historico.css">
+
+</head>
+
+
+<body>
+
+    <main class="pagina">
+
+        <!-- =========================
+             CABEÇALHO
+        ========================== -->
+
+        <section class="cabecalho">
+
+            <div>
+
+                <span class="categoria">
+                    HISTÓRICO DO PRODUTO
+                </span>
+
+                <h1>
+                    {{ produto.nome }}
+                </h1>
+
+                <p>
+                    Consulte todas as entradas e saídas
+                    deste produto.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/movimentacoes/nova?produto_id={{ produto.id }}"
+                class="botao-principal">
+
+                + Registrar movimentação
+
+            </a>
+
+        </section>
+
+
+
+        <!-- =========================
+             RESUMO
+        ========================== -->
+
+        <section class="resumo">
+
+
+            <!-- ESTOQUE -->
+
+            <div class="card-resumo">
+
+                <span class="titulo-resumo">
+                    Estoque atual
+                </span>
+
+                <strong class="numero estoque">
+                    {{ produto.estoque_atual }}
+                </strong>
+
+                <span class="descricao">
+                    unidades disponíveis
+                </span>
+
+            </div>
+
+
+
+            <!-- ENTRADAS -->
+
+            <div class="card-resumo entrada">
+
+                <span class="titulo-resumo">
+                    Total de entradas
+                </span>
+
+                <strong class="numero">
+                    + {{ total_entradas }}
+                </strong>
+
+                <span class="descricao">
+                    unidades recebidas
+                </span>
+
+            </div>
+
+
+
+            <!-- SAÍDAS -->
+
+            <div class="card-resumo saida">
+
+                <span class="titulo-resumo">
+                    Total de saídas
+                </span>
+
+                <strong class="numero">
+                    - {{ total_saidas }}
+                </strong>
+
+                <span class="descricao">
+                    unidades vendidas/retiradas
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             HISTÓRICO
+        ========================== -->
+
+        <section class="historico">
+
+            <div class="titulo-tabela">
+
+                <div>
+
+                    <h2>
+                        Movimentações
+                    </h2>
+
+                    <p>
+                        Registro de movimentações do produto
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Data</th>
+
+                            <th>Tipo</th>
+
+                            <th>Quantidade</th>
+
+                            <th>Preço unit.</th>
+
+                            <th>Total</th>
+
+                            <th>Observação</th>
+
+                            <th>Registrado por</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for m in movimentacoes %}
+
+                        <tr>
+
+
+                            <!-- DATA -->
+
+                            <td>
+
+                                <span class="data">
+
+                                    {{ m.criado_em.strftime('%d/%m/%Y') }}
+
+                                </span>
+
+                                <small>
+
+                                    {{ m.criado_em.strftime('%H:%M') }}
+
+                                </small>
+
+                            </td>
+
+
+
+                            <!-- TIPO -->
+
+                            <td>
+
+                                {% if m.tipo.value == 'entrada' %}
+
+                                    <span class="badge entrada-badge">
+
+                                        ▲ Entrada
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge saida-badge">
+
+                                        ▼ Saída
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- QUANTIDADE -->
+
+                            <td>
+
+                                <strong>
+
+                                    {{ m.quantidade }}
+
+                                </strong>
+
+                                un.
+
+                            </td>
+
+
+
+                            <!-- PREÇO -->
+
+                            <td>
+
+                                R$
+
+                                {{ "%.2f"|format(
+                                    m.preco_unitario
+                                ) }}
+
+                            </td>
+
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <strong>
+
+                                    R$
+
+                                    {{ "%.2f"|format(
+                                        m.valor_total
+                                    ) }}
+
+                                </strong>
+
+                            </td>
+
+
+
+                            <!-- OBSERVAÇÃO -->
+
+                            <td>
+
+                                {% if m.observacao %}
+
+                                    {{ m.observacao }}
+
+                                {% else %}
+
+                                    <span class="vazio">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- USUÁRIO -->
+
+                            <td>
+
+                                {% if m.usuario %}
+
+                                    <span class="usuario">
+
+                                        {{ m.usuario.nome }}
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="vazio">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+
+                        {% if not movimentacoes %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="sem-registros">
+
+                                <div class="icone-vazio">
+                                    📦
+                                </div>
+
+                                <strong>
+                                    Nenhuma movimentação registrada
+                                </strong>
+
+                                <p>
+                                    Este produto ainda não possui
+                                    movimentações.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             VOLTAR
+        ========================== -->
+
+        <a
+            href="/produtos/{{ produto.id }}"
+            class="voltar">
+
+            ← Voltar ao produto
+
+        </a>
+
+    </main>
+
+</body>
+
+</html>

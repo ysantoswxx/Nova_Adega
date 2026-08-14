@@ -1,0 +1,475 @@
+<!-- templates/movimentacoes/index.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Movimentações — AAPM SENAI</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/movimentacoes-index.css">
+
+</head>
+
+
+<body>
+
+    <main class="pagina">
+
+
+        <!-- =========================
+             CABEÇALHO
+        ========================== -->
+
+        <header class="cabecalho">
+
+            <div>
+
+                <span class="categoria">
+                    CONTROLE DE ESTOQUE
+                </span>
+
+                <h1>
+                    Histórico de movimentações
+                </h1>
+
+                <p>
+                    Consulte todas as entradas e saídas
+                    registradas no estoque.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/movimentacoes/nova"
+                class="botao-nova">
+
+                + Registrar movimentação
+
+            </a>
+
+        </header>
+
+
+
+        <!-- =========================
+             FILTROS
+        ========================== -->
+
+        <section class="filtros">
+
+            <div class="titulo-filtros">
+
+                <span>🔎</span>
+
+                <div>
+
+                    <strong>
+                        Filtrar movimentações
+                    </strong>
+
+                    <p>
+                        Encontre rapidamente um registro
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="get"
+                action="/movimentacoes"
+                class="form-filtros">
+
+
+                <!-- PRODUTO -->
+
+                <div class="campo-filtro">
+
+                    <label for="produto_id">
+                        Produto
+                    </label>
+
+                    <select
+                        name="produto_id"
+                        id="produto_id">
+
+                        <option value="0">
+                            Todos os produtos
+                        </option>
+
+                        {% for p in produtos %}
+
+                            <option
+                                value="{{ p.id }}"
+                                {{ 'selected' if produto_id == p.id else '' }}>
+
+                                {{ p.nome }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- TIPO -->
+
+                <div class="campo-filtro">
+
+                    <label for="tipo">
+                        Tipo
+                    </label>
+
+                    <select
+                        name="tipo"
+                        id="tipo">
+
+                        <option value="">
+                            Todos os tipos
+                        </option>
+
+                        <option
+                            value="entrada"
+                            {{ 'selected' if tipo == 'entrada' else '' }}>
+
+                            ▲ Entrada
+
+                        </option>
+
+                        <option
+                            value="saida"
+                            {{ 'selected' if tipo == 'saida' else '' }}>
+
+                            ▼ Saída
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BOTÃO -->
+
+                <button
+                    type="submit"
+                    class="botao-filtrar">
+
+                    Filtrar
+
+                </button>
+
+
+                {% if produto_id or tipo %}
+
+                    <a
+                        href="/movimentacoes"
+                        class="botao-limpar">
+
+                        Limpar filtros
+
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =========================
+             TABELA
+        ========================== -->
+
+        <section class="tabela-card">
+
+
+            <div class="tabela-cabecalho">
+
+                <div>
+
+                    <h2>
+                        Movimentações
+                    </h2>
+
+                    <p>
+                        Registros de entradas e saídas
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Data</th>
+
+                            <th>Produto</th>
+
+                            <th>Tipo</th>
+
+                            <th>Quantidade</th>
+
+                            <th>Preço unit.</th>
+
+                            <th>Total</th>
+
+                            <th>Observação</th>
+
+                            <th>Registrado por</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for m in movimentacoes %}
+
+                        <tr>
+
+
+                            <!-- DATA -->
+
+                            <td>
+
+                                <span class="data">
+
+                                    {{ m.criado_em.strftime(
+                                        '%d/%m/%Y'
+                                    ) }}
+
+                                </span>
+
+                                <small>
+
+                                    {{ m.criado_em.strftime(
+                                        '%H:%M'
+                                    ) }}
+
+                                </small>
+
+                            </td>
+
+
+
+                            <!-- PRODUTO -->
+
+                            <td>
+
+                                <a
+                                    href="/produtos/{{ m.produto_id }}"
+                                    class="produto">
+
+                                    {{ m.produto.nome }}
+
+                                </a>
+
+                            </td>
+
+
+
+                            <!-- TIPO -->
+
+                            <td>
+
+                                {% if m.tipo.value == 'entrada' %}
+
+                                    <span
+                                        class="badge entrada">
+
+                                        ▲ Entrada
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span
+                                        class="badge saida">
+
+                                        ▼ Saída
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- QUANTIDADE -->
+
+                            <td>
+
+                                <strong>
+                                    {{ m.quantidade }}
+                                </strong>
+
+                                <span class="unidade">
+                                    un.
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- PREÇO -->
+
+                            <td>
+
+                                R$
+
+                                {{ "%.2f"|format(
+                                    m.preco_unitario
+                                ) }}
+
+                            </td>
+
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <strong>
+
+                                    R$
+
+                                    {{ "%.2f"|format(
+                                        m.valor_total
+                                    ) }}
+
+                                </strong>
+
+                            </td>
+
+
+
+                            <!-- OBSERVAÇÃO -->
+
+                            <td>
+
+                                {% if m.observacao %}
+
+                                    {{ m.observacao }}
+
+                                {% else %}
+
+                                    <span class="vazio">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- USUÁRIO -->
+
+                            <td>
+
+                                {% if m.usuario %}
+
+                                    <span class="usuario">
+
+                                        {{ m.usuario.nome }}
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="vazio">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+
+                        <!-- SEM RESULTADOS -->
+
+                        {% if not movimentacoes %}
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="sem-resultados">
+
+                                <div class="icone-vazio">
+                                    📦
+                                </div>
+
+                                <strong>
+                                    Nenhuma movimentação encontrada
+                                </strong>
+
+                                <p>
+                                    Tente alterar os filtros
+                                    ou registre uma nova movimentação.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             VOLTAR
+        ========================== -->
+
+        <a
+            href="/"
+            class="voltar">
+
+            ← Dashboard
+
+        </a>
+
+
+    </main>
+
+</body>
+
+</html>
