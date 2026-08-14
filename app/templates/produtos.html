@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <main class="conteudo">
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Sistema PDV</span>
+                    </div>
+                </div>
+            </header>
+
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos" class="ativo"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h1 style="font-size: 22px;">Gerenciamento de Produtos</h1>
+                <a href="/produtos/novo" style="color: #f5e3a3; text-decoration: none; font-weight: 600;">+ Novo Produto</a>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #2a2a2a; text-align: left;">
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">ID</th>
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">Nome</th>
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">Categoria</th>
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">Preço</th>
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">Estoque</th>
+                        <th style="padding: 12px 8px; color: #a1a1aa; font-size: 13px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if produtos %}
+                        {% for p in produtos %}
+                        <tr style="border-bottom: 1px solid #1a1a1a;">
+                            <td style="padding: 12px 8px; font-size: 13px;">{{ p.id }}</td>
+                            <td style="padding: 12px 8px; font-size: 13px;">{{ p.nome }}</td>
+                            <td style="padding: 12px 8px; font-size: 13px;">{{ p.categoria }}</td>
+                            <td style="padding: 12px 8px; font-size: 13px;">R$ {{ "%.2f"|format(p.preco ) }}</td>
+                            <td style="padding: 12px 8px; font-size: 13px;">{{ p.estoque }} un.</td>
+                            <td style="padding: 12px 8px; font-size: 13px;">
+                                <a href="/produtos/{{ p.id }}/editar" style="color: #f5e3a3; margin-right: 8px;">Editar</a>
+                                <a href="/produtos/{{ p.id }}/excluir" style="color: #f87171;">Excluir</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px; color: #71717a;">
+                                Nenhum produto cadastrado ainda.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <p style="margin-top: 30px;"><a href="/" style="color: #a1a1aa; text-decoration: none;">← Dashboard</a></p>
+        </main>
+    </div>
+</body>
+</html>

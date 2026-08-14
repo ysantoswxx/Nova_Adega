@@ -1,6 +1,9 @@
-from app.models import categoria
-from app.models import produto
-from app.models import usuarios
+# app/models/__init__.py
+from app.models.produto import Produto
+from app.models.categoria import Categoria
+from app.models.movimentacoes import Movimentacao
+from app.models.usuarios import Usuario
+from app.models.cliente import Cliente
 
 #Gerar a migration
 

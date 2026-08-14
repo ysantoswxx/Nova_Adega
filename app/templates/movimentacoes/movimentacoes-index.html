@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimentações — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <main class="conteudo">
+            <!-- Header -->
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Sistema PDV</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navegação -->
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes" class="ativo"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+
+            <!-- Título + botão novo -->
+            <div class="titulo-pagina">
+                <h1>Histórico de Movimentações</h1>
+                <a href="/movimentacoes/nova" class="btn-novo"><i class="fa-solid fa-plus"></i> Registrar movimentação</a>
+            </div>
+
+            <!-- Filtros -->
+            <div class="form-filtro">
+                <h3 style="font-size: 14px; color: var(--neon ); margin-bottom: 8px;">
+                    <i class="fa-solid fa-filter"></i> Filtrar movimentações
+                </h3>
+                <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 12px;">
+                    Encontre rapidamente um registro
+                </p>
+
+                <form method="get" action="/movimentacoes" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="campo" style="min-width: 200px;">
+                        <label>Produto</label>
+                        <select name="produto_id">
+                            <option value="0">Todos os produtos</option>
+                            {% for p in produtos %}
+                                <option value="{{ p.id }}" {{ 'selected' if produto_id == p.id else '' }}>
+                                    {{ p.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="campo" style="min-width: 150px;">
+                        <label>Tipo</label>
+                        <select name="tipo">
+                            <option value="">Todos os tipos</option>
+                            <option value="entrada" {{ 'selected' if tipo == 'entrada' else '' }}>Entrada</option>
+                            <option value="saida" {{ 'selected' if tipo == 'saida' else '' }}>Saída</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-novo" style="margin-top: 0;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Filtrar
+                    </button>
+
+                    {% if produto_id or tipo %}
+                        <a href="/movimentacoes" class="btn-cancelar" style="margin-top: 0;">
+                            <i class="fa-solid fa-xmark"></i> Limpar
+                        </a>
+                    {% endif %}
+                </form>
+            </div>
+
+            <!-- Tabela -->
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade</th>
+                        <th>Preço unit.</th>
+                        <th>Total</th>
+                        <th>Observação</th>
+                        <th>Registrado por</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in movimentacoes %}
+                    <tr>
+                        <td>{{ m.criado_em.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>
+                            <a href="/produtos/{{ m.produto_id }}" style="color: var(--neon); text-decoration: none;">
+                                {{ m.produto.nome }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if m.tipo.value == 'entrada' %}
+                                <span class="badge entrada">▲ Entrada</span>
+                            {% else %}
+                                <span class="badge saida">▼ Saída</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ m.quantidade }}</td>
+                        <td>R$ {{ "%.2f"|format(m.preco_unitario) }}</td>
+                        <td>R$ {{ "%.2f"|format(m.valor_total) }}</td>
+                        <td>{{ m.observacao or "—" }}</td>
+                        <td>{{ m.usuario.nome if m.usuario else "—" }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if not movimentacoes %}
+                    <tr>
+                        <td colspan="8" class="vazio-tabela">
+                            <i class="fa-solid fa-chart-line" style="display: block; font-size: 24px; color: var(--text-dim); margin-bottom: 8px;"></i>
+                            Nenhuma movimentação encontrada.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <!-- Voltar -->
+            <p style="margin-top: 20px;">
+                <a href="/" style="color: var(--neon); text-decoration: none; font-size: 14px;">
+                    <i class="fa-solid fa-arrow-left"></i> Dashboard
+                </a>
+            </p>
+        </main>
+
+        <!-- Carrinho lateral -->
+        <aside class="carrinho">
+            <div class="titulo">
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span>0 item(s)</span>
+            </div>
+            <div class="vazio">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>Carrinho vazio</h3>
+                <p>Adicione produtos para começar.</p>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>

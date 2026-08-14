@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Produto — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <main class="conteudo">
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Sistema PDV</span>
+                    </div>
+                </div>
+                <div class="data">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>16:08</span>
+                    <span>•</span>
+                    <span>24 de Abril de 2026</span>
+                </div>
+            </header>
+
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos" class="ativo"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+
+            <div class="titulo-pagina">
+                <h1>Novo Produto</h1>
+            </div>
+
+            <form method="post" action="/produtos/novo" class="card-form">
+                <div class="campo">
+                    <label for="nome">Nome do Produto</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Ex: Brahma Duplo Malte">
+                </div>
+
+                <div class="campo">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="Cervejas">Cervejas</option>
+                        <option value="Refrigerantes">Refrigerantes</option>
+                        <option value="Combos">Combos</option>
+                        <option value="Kit Narguilé">Kit Narguilé</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Ices">Ices</option>
+                        <option value="Salgadinhos">Salgadinhos</option>
+                        <option value="Doces">Doces</option>
+                        <option value="Energéticos">Energéticos</option>
+                        <option value="Vinhos">Vinhos</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="preco">Preço (R$ )</label>
+                    <input type="number" id="preco" name="preco" step="0.01" min="0" required placeholder="0.00">
+                </div>
+
+                <div class="campo">
+                    <label for="estoque">Estoque (unidades)</label>
+                    <input type="number" id="estoque" name="estoque" min="0" required placeholder="0">
+                </div>
+
+                <div class="campo">
+                    <label for="observacao">Observação (opcional)</label>
+                    <textarea id="observacao" name="observacao" placeholder="Alguma observação..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-salvar">
+                    <i class="fa-solid fa-check"></i> Salvar Produto
+                </button>
+                <a href="/produtos" class="btn-cancelar">Cancelar</a>
+            </form>
+
+            <p style="margin-top: 30px;">
+                <a href="/" style="color: #71717a; text-decoration: none; font-size: 14px;">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </p>
+        </main>
+
+        <aside class="carrinho">
+            <div class="titulo">
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span>0 item(s)</span>
+            </div>
+            <div class="vazio">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>Carrinho vazio</h3>
+                <p>Adicione produtos para começar.</p>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
