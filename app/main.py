@@ -122,3 +122,30 @@ async def finalizar_venda(request: Request, db: Session = Depends(get_db)):
         )
     db.commit()
     return {"status": "ok", "total": total}
+
+@app.post("/produtos/novo")
+async def produto_novo(request: Request, db: Session = Depends(get_db)):
+    form = await request.form()
+    nome = form.get("nome")
+    preco = float(form.get("preco"))
+    estoque = int(form.get("estoque"))
+
+    categoria_nome = form.get("categoria")
+    categoria_obj = None
+    if categoria_nome:
+        from app.models.categoria import Categoria
+        categoria_obj = db.query(Categoria).filter(Categoria.nome == categoria_nome).first()
+        if not categoria_obj:
+            categoria_obj = Categoria(nome=categoria_nome)
+            db.add(categoria_obj)
+            db.flush()
+
+    novo_produto = Produto(
+        nome=nome,
+        preco=preco,
+        estoque_atual=estoque,
+        categoria=categoria_obj,
+    )
+    db.add(novo_produto)
+    db.commit()
+    return RedirectResponse(url="/produtos", status_code=303)
