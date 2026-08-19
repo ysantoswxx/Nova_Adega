@@ -1,9 +1,9 @@
-from app.models.produto import Produto
-from app.models.categoria import Categoria
-from app.models.movimentacao import Movimentacao
-from app.models.usuarios import Usuario
-from app.models.cliente import Cliente
-
+from app.models import categoria
+from app.models import produto
+from app.models import usuarios
+from app.models import movimentacao
+from app.models import cliente
+from app.models import vendas
 #Gerar a migration
 
 #python -m alembic revision --autogenerate -m "Criar tabela categorias e produtos."
