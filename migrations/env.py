@@ -11,7 +11,8 @@ import os
 from app.database import Base
 from app.models import usuarios
 
-load_dotenv
+
+load_dotenv()
 #------------------edite aqi ------------------
 
 # this is the Alembic Config object, which provides

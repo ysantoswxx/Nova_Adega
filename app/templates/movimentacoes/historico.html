@@ -1,4 +1,4 @@
-<!-- templates/movimentacoes/index.html -->
+<!-- templates/movimentacoes/historico.html -->
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -11,10 +11,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Movimentações — AAPM SENAI</title>
+    <title>Histórico — {{ produto.nome }}</title>
 
-   <link rel="stylesheet" href="/static/css/home.css">
-
+ <link rel="stylesheet" href="/static/css/home.css">
 
 </head>
 
@@ -23,181 +22,119 @@
 
     <main class="pagina">
 
-
         <!-- =========================
              CABEÇALHO
         ========================== -->
 
-        <header class="cabecalho">
+        <section class="cabecalho">
 
             <div>
 
                 <span class="categoria">
-                    CONTROLE DE ESTOQUE
+                    HISTÓRICO DO PRODUTO
                 </span>
 
                 <h1>
-                    Histórico de movimentações
+                    {{ produto.nome }}
                 </h1>
 
                 <p>
                     Consulte todas as entradas e saídas
-                    registradas no estoque.
+                    deste produto.
                 </p>
 
             </div>
 
 
             <a
-                href="/movimentacoes/nova"
-                class="botao-nova">
+                href="/movimentacoes/nova?produto_id={{ produto.id }}"
+                class="botao-principal">
 
                 + Registrar movimentação
 
             </a>
-
-        </header>
-
-
-
-        <!-- =========================
-             FILTROS
-        ========================== -->
-
-        <section class="filtros">
-
-            <div class="titulo-filtros">
-
-                <span>🔎</span>
-
-                <div>
-
-                    <strong>
-                        Filtrar movimentações
-                    </strong>
-
-                    <p>
-                        Encontre rapidamente um registro
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <form
-                method="get"
-                action="/movimentacoes"
-                class="form-filtros">
-
-
-                <!-- PRODUTO -->
-
-                <div class="campo-filtro">
-
-                    <label for="produto_id">
-                        Produto
-                    </label>
-
-                    <select
-                        name="produto_id"
-                        id="produto_id">
-
-                        <option value="0">
-                            Todos os produtos
-                        </option>
-
-                        {% for p in produtos %}
-
-                            <option
-                                value="{{ p.id }}"
-                                {{ 'selected' if produto_id == p.id else '' }}>
-
-                                {{ p.nome }}
-
-                            </option>
-
-                        {% endfor %}
-
-                    </select>
-
-                </div>
-
-
-                <!-- TIPO -->
-
-                <div class="campo-filtro">
-
-                    <label for="tipo">
-                        Tipo
-                    </label>
-
-                    <select
-                        name="tipo"
-                        id="tipo">
-
-                        <option value="">
-                            Todos os tipos
-                        </option>
-
-                        <option
-                            value="entrada"
-                            {{ 'selected' if tipo == 'entrada' else '' }}>
-
-                            ▲ Entrada
-
-                        </option>
-
-                        <option
-                            value="saida"
-                            {{ 'selected' if tipo == 'saida' else '' }}>
-
-                            ▼ Saída
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- BOTÃO -->
-
-                <button
-                    type="submit"
-                    class="botao-filtrar">
-
-                    Filtrar
-
-                </button>
-
-
-                {% if produto_id or tipo %}
-
-                    <a
-                        href="/movimentacoes"
-                        class="botao-limpar">
-
-                        Limpar filtros
-
-                    </a>
-
-                {% endif %}
-
-            </form>
 
         </section>
 
 
 
         <!-- =========================
-             TABELA
+             RESUMO
         ========================== -->
 
-        <section class="tabela-card">
+        <section class="resumo">
 
 
-            <div class="tabela-cabecalho">
+            <!-- ESTOQUE -->
+
+            <div class="card-resumo">
+
+                <span class="titulo-resumo">
+                    Estoque atual
+                </span>
+
+                <strong class="numero estoque">
+                    {{ produto.estoque_atual }}
+                </strong>
+
+                <span class="descricao">
+                    unidades disponíveis
+                </span>
+
+            </div>
+
+
+
+            <!-- ENTRADAS -->
+
+            <div class="card-resumo entrada">
+
+                <span class="titulo-resumo">
+                    Total de entradas
+                </span>
+
+                <strong class="numero">
+                    + {{ total_entradas }}
+                </strong>
+
+                <span class="descricao">
+                    unidades recebidas
+                </span>
+
+            </div>
+
+
+
+            <!-- SAÍDAS -->
+
+            <div class="card-resumo saida">
+
+                <span class="titulo-resumo">
+                    Total de saídas
+                </span>
+
+                <strong class="numero">
+                    - {{ total_saidas }}
+                </strong>
+
+                <span class="descricao">
+                    unidades vendidas/retiradas
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             HISTÓRICO
+        ========================== -->
+
+        <section class="historico">
+
+            <div class="titulo-tabela">
 
                 <div>
 
@@ -206,12 +143,13 @@
                     </h2>
 
                     <p>
-                        Registros de entradas e saídas
+                        Registro de movimentações do produto
                     </p>
 
                 </div>
 
             </div>
+
 
 
             <div class="tabela-container">
@@ -223,8 +161,6 @@
                         <tr>
 
                             <th>Data</th>
-
-                            <th>Produto</th>
 
                             <th>Tipo</th>
 
@@ -256,35 +192,15 @@
 
                                 <span class="data">
 
-                                    {{ m.criado_em.strftime(
-                                        '%d/%m/%Y'
-                                    ) }}
+                                    {{ m.criado_em.strftime('%d/%m/%Y') }}
 
                                 </span>
 
                                 <small>
 
-                                    {{ m.criado_em.strftime(
-                                        '%H:%M'
-                                    ) }}
+                                    {{ m.criado_em.strftime('%H:%M') }}
 
                                 </small>
-
-                            </td>
-
-
-
-                            <!-- PRODUTO -->
-
-                            <td>
-
-                                <a
-                                    href="/produtos/{{ m.produto_id }}"
-                                    class="produto">
-
-                                    {{ m.produto.nome }}
-
-                                </a>
 
                             </td>
 
@@ -296,8 +212,7 @@
 
                                 {% if m.tipo.value == 'entrada' %}
 
-                                    <span
-                                        class="badge entrada">
+                                    <span class="badge entrada-badge">
 
                                         ▲ Entrada
 
@@ -305,8 +220,7 @@
 
                                 {% else %}
 
-                                    <span
-                                        class="badge saida">
+                                    <span class="badge saida-badge">
 
                                         ▼ Saída
 
@@ -323,12 +237,12 @@
                             <td>
 
                                 <strong>
+
                                     {{ m.quantidade }}
+
                                 </strong>
 
-                                <span class="unidade">
-                                    un.
-                                </span>
+                                un.
 
                             </td>
 
@@ -415,27 +329,25 @@
 
 
 
-                        <!-- SEM RESULTADOS -->
-
                         {% if not movimentacoes %}
 
                         <tr>
 
                             <td
-                                colspan="8"
-                                class="sem-resultados">
+                                colspan="7"
+                                class="sem-registros">
 
                                 <div class="icone-vazio">
                                     📦
                                 </div>
 
                                 <strong>
-                                    Nenhuma movimentação encontrada
+                                    Nenhuma movimentação registrada
                                 </strong>
 
                                 <p>
-                                    Tente alterar os filtros
-                                    ou registre uma nova movimentação.
+                                    Este produto ainda não possui
+                                    movimentações.
                                 </p>
 
                             </td>
@@ -459,13 +371,12 @@
         ========================== -->
 
         <a
-            href="/"
+            href="/produtos/{{ produto.id }}"
             class="voltar">
 
-            ← Dashboard
+            ← Voltar ao produto
 
         </a>
-
 
     </main>
 

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <main class="conteudo">
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Sistema PDV</span>
+                    </div>
+                </div>
+            </header>
+
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos" class="ativo"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+
+            <div class="titulo-pagina">
+                <h1>{{ "Editar produto" if editando else "Novo produto" }}</h1>
+            </div>
+
+            <!-- MENSAGEM DE ERRO -->
+            {% if erro %}
+            <div style="background:rgba(248,113,113,0.1 );border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                <i class="fa-solid fa-triangle-exclamation"></i> {{ erro }}
+            </div>
+            {% endif %}
+
+            <!-- ⚠️ O enctype É OBRIGATÓRIO porque a rota tem UploadFile -->
+            <form method="post"
+                  action="{{ '/produtos/%d/editar'|format(editando.id) if editando else '/produtos/novo' }}"
+                  class="card-form"
+                  enctype="multipart/form-data">
+
+                <div class="campo">
+                    <label for="nome">Nome do produto</label>
+                    <input type="text"
+                           id="nome"
+                           name="nome"
+                           value="{{ valores.nome if valores else (editando.nome if editando else '') }}"
+                           required
+                           placeholder="Ex: Skol Lata 350ml">
+                </div>
+
+                <div class="campo">
+                    <label for="preco">Preço (R$)</label>
+                    <input type="number"
+                           id="preco"
+                           name="preco"
+                           step="0.01"
+                           min="0"
+                           value="{{ valores.preco if valores else (editando.preco if editando else '') }}"
+                           required
+                           placeholder="0.00">
+                </div>
+
+                <div class="campo">
+                    <label for="estoque">Estoque atual</label>
+                    <input type="number"
+                           id="estoque"
+                           name="estoque_atual"
+                           min="0"
+                           value="{{ valores.estoque_atual if valores else (editando.estoque_atual if editando else '0') }}"
+                           required
+                           placeholder="0">
+                </div>
+
+                <div class="campo">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria_id">
+                        <option value="0">Sem categoria</option>
+                        {% for c in categorias %}
+                            <option value="{{ c.id }}"
+                                {{ 'selected' if (valores.categoria_id if valores else (editando.categoria_id if editando else 0)) == c.id else '' }}>
+                                {{ c.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="imagem">Imagem do produto</label>
+                    <input type="file"
+                           id="imagem"
+                           name="imagem"
+                           accept="image/png,image/jpeg,image/webp">
+                    {% if editando and editando.imagem_path %}
+                        <img src="/static/{{ editando.imagem_path }}"
+                             alt="{{ editando.nome }}"
+                             style="width:80px;height:80px;object-fit:cover;border-radius:8px;margin-top:8px;display:block">
+                    {% endif %}
+                </div>
+
+                <div style="margin-top:24px">
+                    <button type="submit" class="btn-salvar">
+                        <i class="fa-solid fa-check"></i> Salvar
+                    </button>
+                    <a href="/produtos" class="btn-cancelar">
+                        <i class="fa-solid fa-xmark"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </main>
+
+        <aside class="carrinho">
+            <div class="titulo">
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span>0 item(s)</span>
+            </div>
+            <div class="vazio">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>Carrinho vazio</h3>
+                <p>Adicione produtos para começar.</p>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
