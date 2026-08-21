@@ -4,17 +4,17 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from fastapi.responses import RedirectResponse
 
-<<<<<<< HEAD
+
 from starlette.middleware.sessions import SessionMiddleware
 from app.database import SessionLocal, Base, engine
 from app.models import Produto, Movimentacao, Usuario, Cliente
-=======
+
 from app.controllers import auth_controller
 from app.controllers import usuario_controller
 from app.controllers import categoria_controller
 from app.controllers import produto_controller
 from app.controllers import movimentacao_controller
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
+
 
 app = FastAPI(title="Adega Premium")
 
@@ -27,7 +27,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Templates Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
-<<<<<<< HEAD
+
 # ============================================
 # DEPENDÊNCIA DO BANCO
 # ============================================
@@ -75,14 +75,14 @@ with engine.connect() as conn:
 # ============================================
 # ROTA PRINCIPAL (PDV)
 # ============================================
-=======
+
 #Inclui os routers dos controladores
 app.include_router(auth_controller.router)
 app.include_router(usuario_controller.router)
 app.include_router(categoria_controller.router)
 app.include_router(produto_controller.router)
 app.include_router(movimentacao_controller.router)
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
+
 
 @app.get("/")
 async def home(request: Request, db: Session = Depends(get_db)):
