@@ -1,13 +1,13 @@
 # Script para popular o banco de dados com usuarios admin
 
-from app.database import Session
+from app.database import SessionLocal
 from app.models.usuarios import Usuario
 from app.auth import hash_senha
 
 
 #funçaõ para cadastrar os usuarios 
 def seed():
-    db = Session()
+    db = SessionLocal()
     try:
         nome_usuario = "admin"
         email_usuario = "admin@teste.com"

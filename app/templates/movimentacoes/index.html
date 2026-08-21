@@ -7,14 +7,16 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Movimentações — AAPM SENAI</title>
 
+<<<<<<< HEAD
    <link rel="stylesheet" href="/static/css/home.css">
 
+=======
+    <link rel="stylesheet" href="/static/css/movimentacoes-index.css">
+>>>>>>> eb176609d8e0da19e42a7689fecc32d6d64b4971
 
 </head>
 
@@ -48,9 +50,7 @@
             </div>
 
 
-            <a
-                href="/movimentacoes/nova"
-                class="botao-nova">
+            <a href="/movimentacoes/nova" class="botao-nova">
 
                 + Registrar movimentação
 
@@ -85,10 +85,7 @@
             </div>
 
 
-            <form
-                method="get"
-                action="/movimentacoes"
-                class="form-filtros">
+            <form method="get" action="/movimentacoes" class="form-filtros">
 
 
                 <!-- PRODUTO -->
@@ -99,9 +96,7 @@
                         Produto
                     </label>
 
-                    <select
-                        name="produto_id"
-                        id="produto_id">
+                    <select name="produto_id" id="produto_id">
 
                         <option value="0">
                             Todos os produtos
@@ -109,13 +104,11 @@
 
                         {% for p in produtos %}
 
-                            <option
-                                value="{{ p.id }}"
-                                {{ 'selected' if produto_id == p.id else '' }}>
+                        <option value="{{ p.id }}" {{ 'selected' if produto_id==p.id else '' }}>
 
-                                {{ p.nome }}
+                            {{ p.nome }}
 
-                            </option>
+                        </option>
 
                         {% endfor %}
 
@@ -132,25 +125,19 @@
                         Tipo
                     </label>
 
-                    <select
-                        name="tipo"
-                        id="tipo">
+                    <select name="tipo" id="tipo">
 
                         <option value="">
                             Todos os tipos
                         </option>
 
-                        <option
-                            value="entrada"
-                            {{ 'selected' if tipo == 'entrada' else '' }}>
+                        <option value="entrada" {{ 'selected' if tipo=='entrada' else '' }}>
 
                             ▲ Entrada
 
                         </option>
 
-                        <option
-                            value="saida"
-                            {{ 'selected' if tipo == 'saida' else '' }}>
+                        <option value="saida" {{ 'selected' if tipo=='saida' else '' }}>
 
                             ▼ Saída
 
@@ -163,9 +150,7 @@
 
                 <!-- BOTÃO -->
 
-                <button
-                    type="submit"
-                    class="botao-filtrar">
+                <button type="submit" class="botao-filtrar">
 
                     Filtrar
 
@@ -174,13 +159,11 @@
 
                 {% if produto_id or tipo %}
 
-                    <a
-                        href="/movimentacoes"
-                        class="botao-limpar">
+                <a href="/movimentacoes" class="botao-limpar">
 
-                        Limpar filtros
+                    Limpar filtros
 
-                    </a>
+                </a>
 
                 {% endif %}
 
@@ -257,7 +240,7 @@
                                 <span class="data">
 
                                     {{ m.criado_em.strftime(
-                                        '%d/%m/%Y'
+                                    '%d/%m/%Y'
                                     ) }}
 
                                 </span>
@@ -265,7 +248,7 @@
                                 <small>
 
                                     {{ m.criado_em.strftime(
-                                        '%H:%M'
+                                    '%H:%M'
                                     ) }}
 
                                 </small>
@@ -278,9 +261,7 @@
 
                             <td>
 
-                                <a
-                                    href="/produtos/{{ m.produto_id }}"
-                                    class="produto">
+                                <a href="/produtos/{{ m.produto_id }}" class="produto">
 
                                     {{ m.produto.nome }}
 
@@ -296,21 +277,19 @@
 
                                 {% if m.tipo.value == 'entrada' %}
 
-                                    <span
-                                        class="badge entrada">
+                                <span class="badge entrada">
 
-                                        ▲ Entrada
+                                    ▲ Entrada
 
-                                    </span>
+                                </span>
 
                                 {% else %}
 
-                                    <span
-                                        class="badge saida">
+                                <span class="badge saida">
 
-                                        ▼ Saída
+                                    ▼ Saída
 
-                                    </span>
+                                </span>
 
                                 {% endif %}
 
@@ -341,7 +320,7 @@
                                 R$
 
                                 {{ "%.2f"|format(
-                                    m.preco_unitario
+                                m.preco_unitario
                                 ) }}
 
                             </td>
@@ -357,7 +336,7 @@
                                     R$
 
                                     {{ "%.2f"|format(
-                                        m.valor_total
+                                    m.valor_total
                                     ) }}
 
                                 </strong>
@@ -372,13 +351,13 @@
 
                                 {% if m.observacao %}
 
-                                    {{ m.observacao }}
+                                {{ m.observacao }}
 
                                 {% else %}
 
-                                    <span class="vazio">
-                                        —
-                                    </span>
+                                <span class="vazio">
+                                    —
+                                </span>
 
                                 {% endif %}
 
@@ -392,17 +371,17 @@
 
                                 {% if m.usuario %}
 
-                                    <span class="usuario">
+                                <span class="usuario">
 
-                                        {{ m.usuario.nome }}
+                                    {{ m.usuario.nome }}
 
-                                    </span>
+                                </span>
 
                                 {% else %}
 
-                                    <span class="vazio">
-                                        —
-                                    </span>
+                                <span class="vazio">
+                                    —
+                                </span>
 
                                 {% endif %}
 
@@ -421,9 +400,7 @@
 
                         <tr>
 
-                            <td
-                                colspan="8"
-                                class="sem-resultados">
+                            <td colspan="8" class="sem-resultados">
 
                                 <div class="icone-vazio">
                                     📦
@@ -458,9 +435,7 @@
              VOLTAR
         ========================== -->
 
-        <a
-            href="/"
-            class="voltar">
+        <a href="/" class="voltar">
 
             ← Dashboard
 

@@ -320,3 +320,282 @@ nav a:hover, nav a.ativo {
     --shadow-neon: 0 0 15px rgba(245, 227, 163, 0.3);
 }
 
+<<<<<<< HEAD
+=======
+.form-filtro a.limpar:hover {
+  color: var(--text);
+}
+
+/* Tabelas */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabela thead th {
+  padding: 12px 16px;
+  color: var(--text-dim);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-hover);
+}
+
+.tabela tbody td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.tabela tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela .vazio-tabela {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* Badges de tipo (entrada/saída) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.entrada {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.badge.saida {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Links de ação na tabela */
+.acao-editar {
+  color: var(--neon);
+  text-decoration: none;
+  font-size: 13px;
+  transition: opacity 0.2s ease;
+}
+
+.acao-editar:hover {
+  opacity: 0.8;
+}
+
+.acao-excluir {
+  color: var(--danger);
+  text-decoration: none;
+  font-size: 13px;
+  margin-left: 12px;
+  transition: opacity 0.2s ease;
+}
+
+.acao-excluir:hover {
+  opacity: 0.8;
+}
+
+/* Card de formulário (para novos produtos, movimentações, etc.) */
+.card-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  margin: 40px auto;          /* Centraliza o formulário na tela */
+}
+
+.card-form .campo {
+  margin-bottom: 20px;
+}
+
+.card-form label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.card-form input,
+.card-form select,
+.card-form textarea {
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.card-form input:focus,
+.card-form select:focus,
+.card-form textarea:focus {
+  border-color: rgba(245, 227, 163, 0.5);
+  box-shadow: 0 0 0 3px var(--neon-dim);
+}
+
+.card-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.card-form .btn-salvar {
+  background: var(--bg-active);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-form .btn-salvar:hover {
+  background: #edd98f;
+  box-shadow: 0 4px 16px rgba(245, 227, 163, 0.3);
+}
+
+.card-form .btn-cancelar {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+}
+
+.card-form .btn-cancelar:hover {
+  border-color: var(--border-light);
+  color: var(--text);
+}
+
+/* ============================================
+   ANIMAÇÕES
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 1280px) {
+  .grid-produtos { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .grid-produtos { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .conteudo {
+    padding: 16px;
+  }
+
+  .carrinho {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+
+  nav a {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .logo h2 {
+    font-size: 16px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-produtos { grid-template-columns: 1fr; }
+}
+
+/* ---------- Acessibilidade ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+>>>>>>> eb176609d8e0da19e42a7689fecc32d6d64b4971

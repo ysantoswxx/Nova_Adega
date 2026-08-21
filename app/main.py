@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -25,9 +26,44 @@ def verificar_senha(senha_plana, senha_hash):
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     try: return pwd_context.verify(senha_plana, senha_hash)
     except: return False
+=======
+# Ponte de entrada do meu sistema
+from fastapi import FastAPI, Request, Depends
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse, RedirectResponse
+from app.auth import get_usuario_opcional
+
+from app.controllers import auth_controller
+from app.controllers import usuario_controller
+from app.controllers import categoria_controller
+from app.controllers import produto_controller
+from app.controllers import movimentacao_controller
+from app.controllers import cliente_controller
+from app.controllers import pdv_controller
+
+app = FastAPI(title="Sistema de Ponto de venda")
+
+#Configurar a pasta para servir os arquivos estáticos (CSS, JS e IMG)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+#Configurar o jinja2 para renderizar os HTML
+templates = Jinja2Templates(directory="app/templates")
+
+#Inclui os routers dos controladores
+app.include_router(auth_controller.router)
+app.include_router(usuario_controller.router)
+app.include_router(categoria_controller.router)
+app.include_router(produto_controller.router)
+app.include_router(movimentacao_controller.router)
+app.include_router(cliente_controller.router)
+app.include_router(pdv_controller.router)
+
+>>>>>>> eb176609d8e0da19e42a7689fecc32d6d64b4971
 
 # --- ROTAS PDV E HOME ---
 @app.get("/")
+<<<<<<< HEAD
 async def home(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("user_id"): return RedirectResponse(url="/auth/login")
     produtos = db.query(Produto).filter(Produto.ativo == True).all()
@@ -121,3 +157,22 @@ async def login_post(request: Request, db: Session = Depends(get_db)):
 async def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/auth/login", status_code=303)
+=======
+def tela_inicial(
+    request: Request,
+    usuario = Depends(get_usuario_opcional)
+):
+    #Tela não logado
+    if usuario is None:
+        return templates.TemplateResponse(
+            request,
+            "index.html",
+            {"request": request}
+        )
+    #Logado - exibir a tela de funcionario
+    return templates.TemplateResponse(
+        request,
+        "home.html",
+        {"request": request, "usuario": usuario}
+    )
+>>>>>>> eb176609d8e0da19e42a7689fecc32d6d64b4971
