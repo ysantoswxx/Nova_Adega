@@ -4,18 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDV - Adega Premium</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-=======
-
-    
-<link rel="stylesheet" href="/static/css/home.css">
-
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
 </head>
 <body>
     <div class="container">
@@ -37,45 +27,11 @@
             </header>
 
             <nav>
-<<<<<<< HEAD
                 <a href="#" class="ativo"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
                 <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
                 <a href="/produtos"><i class="fa-solid fa-box"></i> Produtos</a>
                 <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
                 <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
-=======
-
-                <a href="#" class="ativo">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Ponto de Venda
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-chart-line"></i>
-                    Histórico
-                </a>
-
-                <a href="/produtos">
-                    <i class="fa-solid fa-box"></i>
-                    Produtos
-                </a>
-
-                <a href="#">
-                    <i class="fa-solid fa-users"></i>
-                    Clientes
-                </a>
-
-                <a href="/movimentacoes">
-                    <i class="fa-solid fa-users"></i>
-                    Movimentações
-                </a>
-
-                <a href="/auth/logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Sair
-                </a>
-
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
             </nav>
 
             <section class="pesquisa">
@@ -117,38 +73,5 @@
             </div>
         </aside>
     </div>
-<<<<<<< HEAD
-=======
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const botoesCategoria = document.querySelectorAll('.categorias button');
-        const cardsProduto = document.querySelectorAll('.grid-produtos .produto');
-
-        botoesCategoria.forEach(botao => {
-            botao.addEventListener('click', () => {
-                // Remove 'ativo' de todos e adiciona no clicado
-                botoesCategoria.forEach(b => b.classList.remove('ativo'));
-                botao.classList.add('ativo');
-
-                const categoriaFiltro = botao.dataset.categoria;
-
-                cardsProduto.forEach(card => {
-                    const cardCategoria = card.dataset.categoria;
-
-                    if (categoriaFiltro === 'todos' || cardCategoria === categoriaFiltro) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeInUp 0.3s ease-out both';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-    });
-</script>
-
-
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
 </body>
 </html>
