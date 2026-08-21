@@ -27,7 +27,6 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Templates Jinja2
 templates = Jinja2Templates(directory="app/templates")
 
-<<<<<<< HEAD
 # ============================================
 # DEPENDÊNCIA DO BANCO
 # ============================================
@@ -75,14 +74,6 @@ with engine.connect() as conn:
 # ============================================
 # ROTA PRINCIPAL (PDV)
 # ============================================
-=======
-#Inclui os routers dos controladores
-app.include_router(auth_controller.router)
-app.include_router(usuario_controller.router)
-app.include_router(categoria_controller.router)
-app.include_router(produto_controller.router)
-app.include_router(movimentacao_controller.router)
->>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
 
 @app.get("/")
 async def home(request: Request, db: Session = Depends(get_db)):
