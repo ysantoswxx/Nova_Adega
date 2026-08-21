@@ -1,51 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDV - Adega Premium</title>
-
+<<<<<<< HEAD
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+=======
+
+    
+<link rel="stylesheet" href="/static/css/home.css">
+
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+>>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
 </head>
-
 <body>
-
     <div class="container">
-
-        <!-- CONTEÚDO -->
         <main class="conteudo">
-
-            <!-- CABEÇALHO -->
             <header>
-
                 <div class="logo">
-
-                    <div class="icone">
-                        <i class="fa-solid fa-wine-glass"></i>
-                    </div>
-
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
                     <div>
                         <h2>Adega Premium</h2>
                         <span>Sistema PDV</span>
                     </div>
-
                 </div>
-
                 <div class="data">
                     <i class="fa-regular fa-clock"></i>
                     <span>16:08</span>
                     <span>•</span>
                     <span>24 de Abril de 2026</span>
                 </div>
-
             </header>
 
-            <!-- MENU -->
             <nav>
+<<<<<<< HEAD
+                <a href="#" class="ativo"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+=======
 
                 <a href="#" class="ativo">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -77,94 +75,80 @@
                     Sair
                 </a>
 
+>>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
             </nav>
 
-            <!-- PESQUISA -->
             <section class="pesquisa">
-
                 <div class="buscar">
-
                     <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input
-                        type="text"
-                        placeholder="Buscar produtos...">
-
+                    <input type="text" placeholder="Buscar produtos...">
                 </div>
-
             </section>
 
-            <!-- CATEGORIAS -->
             <section class="categorias">
-
                 <button class="ativo">Todos</button>
-
                 <button>Cervejas</button>
-
                 <button>Refrigerantes</button>
-
                 <button>Combos</button>
-
                 <button>Kit Narguilé</button>
-
                 <button>Bebidas</button>
-
                 <button>Vinhos</button>
-
                 <button>Doces</button>
-
             </section>
 
-            <!-- ÁREA PRINCIPAL -->
             <section class="conteudo-principal">
-
                 <div class="mensagem">
-
                     <i class="fa-solid fa-wine-bottle"></i>
-
                     <h2>Bem-vindo ao Sistema da Adega</h2>
-
-                    <p>
-                        Utilize o menu acima para acessar os módulos do sistema.
-                    </p>
-
+                    <p>Utilize o menu acima para acessar os módulos do sistema.</p>
                 </div>
-
             </section>
-
         </main>
 
-        <!-- CARRINHO -->
         <aside class="carrinho">
-
             <div class="titulo">
-
-                <h2>
-
-                    <i class="fa-solid fa-cart-shopping"></i>
-
-                    Carrinho
-
-                </h2>
-
-                <span>0 item(s)</span>
-
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span>0 item(s )</span>
             </div>
-
             <div class="vazio">
-
                 <i class="fa-solid fa-cart-shopping"></i>
-
                 <h3>Carrinho vazio</h3>
-
                 <p>Adicione produtos para começar.</p>
-
             </div>
-
         </aside>
-
     </div>
+<<<<<<< HEAD
+=======
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const botoesCategoria = document.querySelectorAll('.categorias button');
+        const cardsProduto = document.querySelectorAll('.grid-produtos .produto');
+
+        botoesCategoria.forEach(botao => {
+            botao.addEventListener('click', () => {
+                // Remove 'ativo' de todos e adiciona no clicado
+                botoesCategoria.forEach(b => b.classList.remove('ativo'));
+                botao.classList.add('ativo');
+
+                const categoriaFiltro = botao.dataset.categoria;
+
+                cardsProduto.forEach(card => {
+                    const cardCategoria = card.dataset.categoria;
+
+                    if (categoriaFiltro === 'todos' || cardCategoria === categoriaFiltro) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeInUp 0.3s ease-out both';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+>>>>>>> 43f5764ddd5543ebf85457be27bf32ff66b81b4d
 </body>
-
 </html>

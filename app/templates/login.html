@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        body { display: flex; align-items: center; justify-content: center; }
+        .login-card { max-width: 400px; width: 100%; }
+        .erro-msg {
+            background: rgba(248, 113, 113, 0.1 );
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #f87171;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/auth/login" class="card-form login-card">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <div style="width:56px;height:56px;background:var(--bg-active);border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;color:#1a1a1a;margin-bottom:12px;">
+                <i class="fa-solid fa-wine-glass"></i>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 700;">Adega Premium</h2>
+            <p style="color: var(--text-dim); font-size: 13px;">Faça login para acessar o sistema</p>
+        </div>
+
+        {% if erro %}
+        <div class="erro-msg">{{ erro }}</div>
+        {% endif %}
+
+        <div class="campo">
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" name="usuario" required placeholder="Seu usuário">
+        </div>
+
+        <div class="campo">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn-salvar" style="width: 100%; margin-top: 8px;">
+            <i class="fa-solid fa-right-to-bracket"></i> Entrar
+        </button>
+    </form>
+</body>
+</html>
