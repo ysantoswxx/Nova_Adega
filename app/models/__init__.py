@@ -1,6 +1,9 @@
-from app.models import categoria
-from app.models import produto
-from app.models import usuarios
+from .categoria import Categoria
+from .produto import Produto
+from .usuarios import Usuario
+from .movimentacoes import Movimentacao
+from .cliente import Cliente
+
 
 #Gerar a migration
 

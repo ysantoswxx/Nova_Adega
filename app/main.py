@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 
 from starlette.middleware.sessions import SessionMiddleware
 from app.database import SessionLocal, Base, engine
-from app.models import Produto, Movimentacao, Usuario, Cliente
+from app.models import produto, movimentacao, usuarios, cliente
 
 from app.controllers import auth_controller
 from app.controllers import usuario_controller
@@ -86,7 +86,7 @@ app.include_router(movimentacao_controller.router)
 
 @app.get("/")
 async def home(request: Request, db: Session = Depends(get_db)):
-    produtos = db.query(Produto).all()
+    produtos = db.query(produto).all()
     return templates.TemplateResponse(
         "home.html",
         {"request": request, "produtos": produtos}
@@ -99,8 +99,8 @@ async def home(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/movimentacoes")
 async def movimentacoes(request: Request, db: Session = Depends(get_db)):
-    lista = db.query(Movimentacao).order_by(Movimentacao.criado_em.desc()).all()
-    produtos = db.query(Produto).all()
+    lista = db.query(movimentacao).order_by(movimentacao.criado_em.desc()).all()
+    produtos = db.query(produto).all()
     return templates.TemplateResponse(
         "movimentacoes/index.html",
         {
@@ -119,7 +119,7 @@ async def movimentacoes(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/produtos")
 async def produtos(request: Request, db: Session = Depends(get_db)):
-    produtos_lista = db.query(Produto).all()
+    produtos_lista = db.query(produto).all()
     return templates.TemplateResponse(
         "produtos.html",
         {"request": request, "produtos": produtos_lista}
@@ -143,7 +143,7 @@ async def produto_novo(request: Request, db: Session = Depends(get_db)):
     estoque = int(form.get("estoque"))
     observacao = form.get("observacao")
 
-    novo_produto = Produto(
+    novo_produto = produto(
         nome=nome,
         categoria=categoria,
         preco=preco,
@@ -162,7 +162,7 @@ async def produto_novo(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/clientes")
 async def clientes(request: Request, db: Session = Depends(get_db)):
-    lista = db.query(Cliente).all()
+    lista = db.query(cliente).all()
     return templates.TemplateResponse(
         "clientes.html",
         {"request": request, "clientes": lista}
@@ -190,7 +190,7 @@ async def login_submit(
     usuario = form.get("usuario")
     senha = form.get("senha")
 
-    user = db.query(Usuario).filter(Usuario.email == usuario).first()
+    user = db.query(usuarios).filter(usuarios.email == usuario).first()
 
     if not user:
         return templates.TemplateResponse(
@@ -227,8 +227,8 @@ async def finalizar_venda(request: Request, db: Session = Depends(get_db)):
     total = sum(i["preco"] * i["quantidade"] for i in itens)
 
     for item in itens:
-        db.query(Produto).filter(Produto.id == item["id"]).update(
-            {Produto.estoque_atual: Produto.estoque_atual - item["quantidade"]}
+        db.query(produto).filter(produto.id == item["id"]).update(
+            {produto.estoque_atual: produto.estoque_atual - item["quantidade"]}
         )
 
     db.commit()
