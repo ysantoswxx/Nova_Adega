@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Cliente - Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+    <div class="card-form">
+        <h2><i class="fa-solid fa-user-plus"></i> Novo Cliente</h2>
+        <form method="POST">
+            <div class="campo">
+                <label>Nome Completo</label>
+                <input type="text" name="nome" required placeholder="Ex: João Silva">
+            </div>
+            <div class="campo">
+                <label>Telefone</label>
+                <input type="text" name="telefone" placeholder="(00) 00000-0000">
+            </div>
+            <div class="campo">
+                <label>E-mail</label>
+                <input type="email" name="email" placeholder="cliente@email.com">
+            </div>
+            <div class="campo">
+                <label>CPF</label>
+                <input type="text" name="cpf" placeholder="000.000.000-00">
+            </div>
+            <button type="submit" class="btn-salvar">Salvar Cliente</button>
+            <a href="/clientes" class="btn-cancelar">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -2,94 +2,140 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Produtos — AAPM SENAI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos — Adega Premium</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-    <h1>Produtos</h1>
+    <div class="container">
+        <main class="conteudo">
+            <!-- Header -->
+            <header>
+                <div class="logo">
+                    <div class="icone"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div>
+                        <h2>Adega Premium</h2>
+                        <span>Sistema PDV</span>
+                    </div>
+                </div>
+                <div class="data">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>{{ agora.strftime('%H:%M' ) if agora else '' }}</span>
+                </div>
+            </header>
 
-    {% if request.query_params.get('criado') == 'ok' %}
-        <p style="color:green">Produto criado com sucesso!</p>
-    {% endif %}
-    {% if request.query_params.get('desativado') == 'ok' %}
-        <p style="color:green">Produto desativado.</p>
-    {% endif %}
+            <!-- Navegação -->
+            <nav>
+                <a href="/"><i class="fa-solid fa-cart-shopping"></i> Ponto de Venda</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos" class="ativo"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
 
-    <!-- Filtros -->
-    <form method="get" action="/produtos">
-        <input  type="text"
-                name="busca"
-                placeholder="Buscar por nome..."
-                value="{{ busca }}">
-
-        <select name="categoria_id">
-            <option value="0">Todas as categorias</option>
-            {% for c in categorias %}
-                <option value="{{ c.id }}"
-                    {{ 'selected' if categoria_id == c.id else '' }}>
-                    {{ c.nome }}
-                </option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Filtrar</button>
-
-        {% if busca or categoria_id %}
-            <a href="/produtos">Limpar</a>
-        {% endif %}
-    </form>
-
-    {% if usuario.role == 'admin' %}
-        <a href="/produtos/novo">+ Novo produto</a>
-    {% endif %}
-
-    <table border="1" cellpadding="8">
-        <thead>
-            <tr>
-                <th>Imagem</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Preço</th>
-                <th>Estoque</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in produtos %}
-            <tr>
-                <td>
-                    <img src="{{ p.imagem_url }}"
-                         alt="{{ p.nome }}"
-                         width="50" height="50"
-                         style="object-fit:cover">
-                </td>
-                <td><a href="/produtos/{{ p.id }}">{{ p.nome }}</a></td>
-                <td>{{ p.categoria.nome if p.categoria else "—" }}</td>
-                <td>R$ {{ "%.2f"|format(p.preco) }}</td>
-                <td>{{ p.estoque_atual }}</td>
-                <td>
-                    {% if usuario.role == 'admin' %}
-                        <a href="/produtos/{{ p.id }}/editar">Editar</a>
-                        <form action="/produtos/{{ p.id }}/desativar"
-                              method="post"
-                              style="display:inline"
-                              onsubmit="return confirm('Desativar {{ p.nome }}?')">
-                            <button type="submit">Desativar</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-
-            {% if not produtos %}
-            <tr>
-                <td colspan="6" style="text-align:center">
-                    Nenhum produto encontrado.
-                </td>
-            </tr>
+            <!-- Mensagens de sucesso -->
+            {% if request.query_params.get('criado') == 'ok' %}
+                <div style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ade80;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    <i class="fa-solid fa-check-circle"></i> Produto criado com sucesso!
+                </div>
             {% endif %}
-        </tbody>
-    </table>
 
-    <p><a href="/">← Dashboard</a></p>
+            {% if request.query_params.get('desativado') == 'ok' %}
+                <div style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ade80;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    <i class="fa-solid fa-check-circle"></i> Produto desativado.
+                </div>
+            {% endif %}
+
+            <!-- Título + botão Novo -->
+            <div class="titulo-pagina">
+                <h1>Produtos</h1>
+                {% if usuario.role == 'admin' %}
+                    <a href="/produtos/novo" class="btn-novo"><i class="fa-solid fa-plus"></i> Novo Produto</a>
+                {% endif %}
+            </div>
+
+            <!-- Filtros -->
+            <form method="get" action="/produtos" class="form-filtro">
+                <input type="text" name="busca" placeholder="Buscar por nome..." value="{{ busca }}">
+
+                <select name="categoria_id">
+                    <option value="0">Todas as categorias</option>
+                    {% for c in categorias %}
+                        <option value="{{ c.id }}"
+                            {{ 'selected' if categoria_id == c.id else '' }}>
+                            {{ c.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit"><i class="fa-solid fa-filter"></i> Filtrar</button>
+
+                {% if busca or categoria_id %}
+                    <a href="/produtos" class="limpar"><i class="fa-solid fa-xmark"></i> Limpar</a>
+                {% endif %}
+            </form>
+
+            <!-- Tabela -->
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in produtos %}
+                    <tr>
+                        <td>
+                            <img src="{{ p.imagem_url or 'https://placehold.co/50x50/1a1a1a/f5e3a3?text=P' }}"
+                                 alt="{{ p.nome }}"
+                                 width="50" height="50"
+                                 style="border-radius:6px;object-fit:cover">
+                        </td>
+                        <td><a href="/produtos/{{ p.id }}" class="acao-editar" style="font-weight:600">{{ p.nome }}</a></td>
+                        <td>{{ p.categoria.nome if p.categoria else "—" }}</td>
+                        <td>R$ {{ "%.2f"|format(p.preco ) }}</td>
+                        <td>{{ p.estoque_atual }}</td>
+                        <td>
+                            {% if usuario.role == 'admin' %}
+                                <a href="/produtos/{{ p.id }}/editar" class="acao-editar"><i class="fa-solid fa-pen"></i> Editar</a>
+                                <form action="/produtos/{{ p.id }}/desativar"
+                                      method="post"
+                                      style="display:inline"
+                                      onsubmit="return confirm('Desativar {{ p.nome }}?')">
+                                    <button type="submit" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:13px"><i class="fa-solid fa-ban"></i> Desativar</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if not produtos %}
+                    <tr>
+                        <td colspan="6" class="vazio-tabela">Nenhum produto encontrado.</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </main>
+
+        <!-- Carrinho lateral -->
+        <aside class="carrinho">
+            <div class="titulo">
+                <h2><i class="fa-solid fa-cart-shopping"></i> Carrinho</h2>
+                <span>0 item(s)</span>
+            </div>
+            <div class="vazio">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>Carrinho vazio</h3>
+                <p>Adicione produtos para começar.</p>
+            </div>
+        </aside>
+    </div>
 </body>
 </html>

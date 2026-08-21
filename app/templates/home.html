@@ -3,10 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>PDV - Adega Premium</title>
-
+    <title>Adega Premium - PDV</title>
     <link rel="stylesheet" href="/static/css/home.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -22,54 +19,22 @@
             <header>
 
                 <div class="logo">
-
-                    <div class="icone">
-                        <i class="fa-solid fa-wine-glass"></i>
-                    </div>
-
-                    <div>
-                        <h2>Adega Premium</h2>
-                        <span>Sistema PDV</span>
-                    </div>
-
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <div><h2>Adega Premium</h2><span>SISTEMA PDV</span></div>
                 </div>
-
-                <div class="data">
+                <div class="data-hora">
                     <i class="fa-regular fa-clock"></i>
-                    <span>PDV Ativo</span>
+                    <span id="hora">00:00</span> <span class="sep">•</span> <span id="data">...</span>
                 </div>
 
             </header>
 
-
-            <!-- MENU -->
             <nav>
-
-                <a href="/" class="ativo">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Ponto de Venda
-                </a>
-
-                <a href="/movimentacoes">
-                    <i class="fa-solid fa-chart-line"></i>
-                    Histórico
-                </a>
-
-                <a href="/produtos">
-                    <i class="fa-solid fa-box"></i>
-                    Produtos
-                </a>
-
-                <a href="/clientes">
-                    <i class="fa-solid fa-users"></i>
-                    Clientes
-                </a>
-
-                <a href="/auth/logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Sair
-                </a>
-
+                <a href="/" class="ativo"><i class="fa-solid fa-cart-shopping"></i> PDV</a>
+                <a href="/movimentacoes"><i class="fa-solid fa-chart-line"></i> Histórico</a>
+                <a href="/produtos"><i class="fa-solid fa-box"></i> Produtos</a>
+                <a href="/clientes"><i class="fa-solid fa-users"></i> Clientes</a>
+                <a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
             </nav>
 
 
@@ -79,103 +44,25 @@
                 <div class="buscar">
 
                     <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input type="text" id="input-busca" placeholder="Buscar produtos...">
-
+                    <input type="text" id="busca" placeholder="Buscar produtos..." onkeyup="filtrar( )">
                 </div>
 
             </section>
 
-
-            <!-- CATEGORIAS -->
-            <section class="categorias">
-
-                <button class="ativo" data-categoria="todos">
-                    Todos
-                </button>
-
-                <button data-categoria="Cervejas">
-                    Cervejas
-                </button>
-
-                <button data-categoria="Refrigerantes">
-                    Refrigerantes
-                </button>
-
-                <button data-categoria="Combos">
-                    Combos
-                </button>
-
-                <button data-categoria="Kit Narguilé">
-                    Kit Narguilé
-                </button>
-
-                <button data-categoria="Bebidas">
-                    Bebidas
-                </button>
-
-                <button data-categoria="Vinhos">
-                    Vinhos
-                </button>
-
-                <button data-categoria="Doces">
-                    Doces
-                </button>
-
+            <section class="filtros">
+                <button class="f-btn ativo" onclick="filterCat('todos', this)">Todos</button>
+                {% for c in categorias %}<button class="f-btn" onclick="filterCat('{{c.id}}', this)">{{c.nome}}</button>{% endfor %}
             </section>
 
-
-            <!-- PRODUTOS -->
-            <section class="conteudo-principal">
-
-                <div class="grid-produtos" id="grid-produtos">
-
-                    {% for p in produtos %}
-
-                    <div class="card-produto"
-                        data-categoria="{{ p.categoria.nome if p.categoria else 'Sem categoria' }}"
-                        data-nome="{{ p.nome }}">
-
-                        <div class="card-img">
-
-                            <img src="{{ p.imagem_url }}" alt="{{ p.nome }}">
-
-                        </div>
-
-
-                        <div class="card-info">
-
-                            <h3>{{ p.nome }}</h3>
-
-                            <span class="badge-categoria">
-                                {{ p.categoria.nome if p.categoria else 'Sem categoria' }}
-                            </span>
-
-
-                            <div class="card-preco">
-
-                                <span class="preco">
-                                    R$ {{ "%.2f"|format(p.preco) }}
-                                </span>
-
-                                <span class="estoque {{ 'baixo' if p.estoque_baixo else '' }}">
-                                    {{ p.estoque_atual }} un
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <buttononclick="adicionarAoCarrinho( {{ p.id }}, {{ p.nome | tojson }}, {{ p.preco }} )>
-                            Adicionar
-                            </button>
-
-                    </div>
-
-                    {% endfor %}
-
+            <section class="grid" id="grid">
+                {% for p in produtos %}
+                <div class="card" data-nome="{{p.nome|lower}}" data-cat="{{p.categoria_id}}">
+                    <h3>{{p.nome}}</h3>
+                    <span class="preco">R$ {{ "%.2f"|format(p.preco) }}</span>
+                    <div class="est">Estoque: {{p.estoque_atual}}</div>
+                    <button onclick="add({{p.id}}, '{{p.nome}}', {{p.preco}}, {{p.estoque_atual}})">+ Adicionar</button>
                 </div>
-
+                {% endfor %}
             </section>
 
         </main>
@@ -183,69 +70,60 @@
 
         <!-- CARRINHO -->
         <aside class="carrinho">
-
-            <div class="titulo">
-
-                <h2>
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Carrinho
-                </h2>
-
-                <span id="contador-itens">
-                    0 item(s)
-                </span>
-
-            </div>
-
-
-            <!-- CARRINHO VAZIO -->
-            <div id="vazio-carrinho" class="vazio">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-                <h3>
-                    Carrinho vazio
-                </h3>
-
-                <p>
-                    Adicione produtos para começar.
-                </p>
-
-            </div>
-
-
-            <!-- ITENS -->
-            <div id="itens-carrinho" class="itens"></div>
-
-
-            <!-- RODAPÉ -->
-            <div id="rodape-carrinho" class="rodape" style="display: none;">
-
-                <div class="total">
-
-                    <span>Total:</span>
-
-                    <span id="valor-total">
-                        R$ 0,00
-                    </span>
-
-                </div>
-
-
-                <button class="btn-finalizar" onclick="finalizarVenda()">
-
-                    <i class="fa-solid fa-check"></i>
-
-                    Finalizar Venda
-
-                </button>
-
-            </div>
-
+            <h2>Carrinho (<span id="count">0</span>)</h2>
+            <div id="itens"></div>
+            <div class="total">Total: <span id="total">R$ 0,00</span></div>
+            <button class="btn-fin" onclick="finalizar()">Finalizar Venda</button>
         </aside>
 
     </div>
 
+<<<<<<< HEAD
+    <script>
+        function clock() {
+            const now = new Date();
+            document.getElementById('hora').innerText = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('data').innerText = now.toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'});
+        }
+        setInterval(clock, 1000); clock();
+
+        let cart = [];
+        function add(id, nome, preco, est) {
+            let item = cart.find(i => i.id === id);
+            if(item) { if(item.quantidade < est) item.quantidade++; else alert('Sem estoque!'); }
+            else { if(est > 0) cart.push({id, nome, preco, quantidade:1}); else alert('Sem estoque!'); }
+            render();
+        }
+
+        function render() {
+            const div = document.getElementById('itens');
+            let t = 0; div.innerHTML = '';
+            cart.forEach(i => {
+                t += i.preco * i.quantidade;
+                div.innerHTML += `<div class='c-item'>${i.nome} x${i.quantidade} - R$ ${(i.preco*i.quantidade).toFixed(2)}</div>`;
+            });
+            document.getElementById('total').innerText = 'R$ ' + t.toFixed(2).replace('.',',');
+            document.getElementById('count').innerText = cart.length;
+        }
+
+        function filtrar() {
+            let val = document.getElementById('busca').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(c => c.style.display = c.dataset.nome.includes(val) ? 'block' : 'none');
+        }
+
+        function filterCat(id, btn) {
+            document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('ativo'));
+            btn.classList.add('ativo');
+            document.querySelectorAll('.card').forEach(c => c.style.display = (id==='todos' || c.dataset.cat===id) ? 'block' : 'none');
+        }
+
+        function finalizar() {
+            if(cart.length === 0) return;
+            fetch('/vendas', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({itens:cart})})
+            .then(() => { alert('Venda Concluída!'); location.reload(); });
+        }
+    </script>
+=======
 
     <script>
 
@@ -579,6 +457,7 @@
 
     </script>
 
+>>>>>>> eb176609d8e0da19e42a7689fecc32d6d64b4971
 </body>
 
 </html>
