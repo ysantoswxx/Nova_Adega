@@ -15,7 +15,6 @@ templates = Jinja2Templates(directory="app/templates")
 def listar_clientes(
     request: Request,
     busca: str = "",
-    apenas_associados: bool = False,
     db: Session = Depends(get_db),
     admin = Depends(get_admin)
 ):
@@ -27,26 +26,16 @@ def listar_clientes(
             Cliente.matricula.ilike(f"%{busca}%")
         )
 
-    if apenas_associados:
-        query = query.filter(Cliente.is_associado == True)
-
     clientes = query.order_by(Cliente.nome).all()
-
-    total_associados = db.query(Cliente).filter(
-        Cliente.is_associado == True,
-        Cliente.ativo == True
-    ).count()
 
     return templates.TemplateResponse(
         request,
         "clientes/index.html",
         {
-            "request":           request,
-            "usuario":           admin,
-            "clientes":          clientes,
-            "busca":             busca,
-            "apenas_associados": apenas_associados,
-            "total_associados":  total_associados,
+            "request": request,
+            "usuario": admin,
+            "clientes": clientes,
+            "busca": busca,
         }
     )
 
@@ -66,7 +55,6 @@ def criar(
     nome: str          = Form(...),
     matricula: str     = Form(""),
     telefone: str      = Form(""),
-    is_associado: bool = Form(False),
     db: Session        = Depends(get_db),
     admin              = Depends(get_admin)
 ):
@@ -81,23 +69,23 @@ def criar(
                 request,
                 "clientes/form.html",
                 {
-                    "request":  request,
-                    "usuario":  admin,
+                    "request": request,
+                    "usuario": admin,
                     "editando": None,
-                    "erro":     f"Matrícula {matricula} já cadastrada.",
-                    "valores":  {
-                        "nome": nome, "matricula": matricula,
-                        "telefone": telefone, "is_associado": is_associado
+                    "erro": f"Matrícula {matricula} já cadastrada.",
+                    "valores": {
+                        "nome": nome,
+                        "matricula": matricula,
+                        "telefone": telefone
                     }
                 },
                 status_code=400
             )
 
     db.add(Cliente(
-        nome         = nome.strip(),
-        matricula    = matricula.strip() or None,
-        telefone     = telefone.strip() or None,
-        is_associado = is_associado,
+        nome=nome.strip(),
+        matricula=matricula.strip() or None,
+        telefone=telefone.strip() or None,
     ))
     db.commit()
 
@@ -128,7 +116,6 @@ def editar(
     nome: str          = Form(...),
     matricula: str     = Form(""),
     telefone: str      = Form(""),
-    is_associado: bool = Form(False),
     db: Session        = Depends(get_db),
     admin              = Depends(get_admin)
 ):
@@ -147,10 +134,9 @@ def editar(
                 status_code=302
             )
 
-    editando.nome         = nome.strip()
-    editando.matricula    = matricula.strip() or None
-    editando.telefone     = telefone.strip() or None
-    editando.is_associado = is_associado
+    editando.nome = nome.strip()
+    editando.matricula = matricula.strip() or None
+    editando.telefone = telefone.strip() or None
     db.commit()
 
     return RedirectResponse(url="/clientes?editado=ok", status_code=302)
