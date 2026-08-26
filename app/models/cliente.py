@@ -12,8 +12,6 @@ class Cliente(Base):
 
     telefone   = Column(String(20), nullable=True)
 
-    # is_associado define se o cliente tem 10% de desconto
-    is_associado = Column(Boolean, default=False, nullable=False)
 
     ativo      = Column(Boolean, default=True)
     criado_em  = Column(DateTime, server_default=func.now())

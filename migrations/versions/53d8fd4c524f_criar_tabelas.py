@@ -1,8 +1,8 @@
 """Criar tabelas
 
-Revision ID: 9c02c5d10053
+Revision ID: 53d8fd4c524f
 Revises: 
-Create Date: 2026-08-19 15:52:48.160069
+Create Date: 2026-08-26 16:18:32.237083
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9c02c5d10053'
+revision: str = '53d8fd4c524f'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,7 +31,6 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nome', sa.String(length=150), nullable=False),
     sa.Column('telefone', sa.String(length=20), nullable=True),
-    sa.Column('is_associado', sa.Boolean(), nullable=False),
     sa.Column('ativo', sa.Boolean(), nullable=True),
     sa.Column('criado_em', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.PrimaryKeyConstraint('id')
