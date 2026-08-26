@@ -50,7 +50,7 @@ def listar_movimentacoes(
 
     return templates.TemplateResponse(
         request,
-        "movimentacoes/index.html",
+        "movimentacoes/movimentacoes-index.html",
         {
             "request":        request,
             "usuario":        admin,
