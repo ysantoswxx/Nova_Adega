@@ -74,15 +74,21 @@ def fazer_login(
     senha: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    # 1. Busca o usuário pelo email no db
+    print("LOGIN RECEBIDO")
+    print("EMAIL:", email)
+
     usuario = db.query(Usuario).filter_by(email=email).first()
 
-    # 2. Verificar a senha com bcrypt
+    print("USUARIO:", usuario)
+
     senha_correta = (
         usuario is not None and verificar_senha(senha, usuario.senha_hash)
     )
-   
+
+    print("SENHA CORRETA:", senha_correta)
+
     if not senha_correta:
+        print("LOGIN NEGADO")
         return templates.TemplateResponse(
             request,
             "auth/login.html",
@@ -91,9 +97,9 @@ def fazer_login(
                 "erro": "E-mail ou senha incorretos"
             }
         )
-   
-    # Verificar se o usuário está ativo
+
     if not usuario.ativo:
+        print("USUARIO INATIVO")
         return templates.TemplateResponse(
             request,
             "auth/login.html",
@@ -103,8 +109,8 @@ def fazer_login(
             }
         )
 
-    # 3. Gera o token JWT
-    # Dados do token (payload)
+    print("USUARIO AUTENTICADO")
+
     token_data = {
         "sub": usuario.email,
         "nome": usuario.nome,
@@ -114,17 +120,20 @@ def fazer_login(
 
     token = criar_token(token_data)
 
-    # 4. Salvar o token em um cookie e redirecionar para página home
+    print("TOKEN CRIADO")
+
     response = RedirectResponse(url="/", status_code=302)
 
-    # Define o cookie com o token JWT
     response.set_cookie(
         key="access_token",
         value=token,
         httponly=True,
-        max_age=3600, # Expira em 1 hora
+        max_age=3600,
         samesite="lax"
     )
+
+    print("COOKIE CRIADO")
+    print("REDIRECIONANDO PARA /")
 
     return response
 
